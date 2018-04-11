@@ -103,7 +103,7 @@ def deal_not_find_product_page():
         pass
     else:
         print(nothing.text)
-        browser.quit()
+        browser.close()
 
 
 def get_page_products():
@@ -156,6 +156,8 @@ def run_main():
         for page_number in range(2, pages_number + 1):
             auto_next_page(page_number)
     except ConnectionAbortedError:
+        pass
+    except Exception as e:
         pass
     finally:
         browser.quit()
