@@ -1,5 +1,5 @@
 """
-使用selenium+chromedriver+chrome模拟点击，在天猫上搜索关键字获取产品信息（pyquery分析html）
+使用selenium+PhantomJS模拟点击，在天猫上搜索关键字获取产品信息（bs4分析html）
 注释：
 presence_of_element_located   等待元素加载完成 ，这里是判断搜索输入框是否加载
 element_to_be_clickable    等待是否可以点击，搜索按钮
@@ -13,18 +13,12 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.chrome.options import Options
 from pyquery import PyQuery as PQ
 from config import *
 from pymongo import MongoClient
 
-# chrome_options 配置使用无界面chrome，刚调试时还是建议使用有界面的好
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-gpu')
-browser = webdriver.Chrome(chrome_options=chrome_options)
-
-# browser = webdriver.Chrome()
+browser = webdriver.PhantomJS(service_args=SERVICR_ARGS)
+browser.set_window_size(1400, 900)
 wait = WebDriverWait(browser, 10)
 client = MongoClient(MONGO_HOST)
 db = client[MONGO_DB]
@@ -126,7 +120,7 @@ def get_page_products():
                 print("非商品-广告图片")
                 continue
             product = {
-                "productPrice": item.find(".productPrice").text().split()[1],
+                "productPrice": item.find(".productPrice").text()[1:],
                 "productTitle": item.find('.productTitle').text(),
                 "productShop": item.find('.productShop-name').text(),
                 "productStatus": item.find('.productStatus').text()[6:-1],
@@ -155,7 +149,9 @@ def run_main():
             pages_number = int(pages_number)
         for page_number in range(2, pages_number + 1):
             auto_next_page(page_number)
-    except ConnectionAbortedError:
+    except ConnectionError:
+        pass
+    except Exception as e:
         pass
     finally:
         browser.quit()
