@@ -23,6 +23,7 @@ chrome_options = Options()
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--disable-gpu')
 browser = webdriver.Chrome(chrome_options=chrome_options)
+browser.set_window_size(1400, 900)  # 无界面时最好设置下窗口大小
 
 # browser = webdriver.Chrome()
 wait = WebDriverWait(browser, 10)
@@ -135,7 +136,7 @@ def get_page_products():
             # print(product)
             save_to_mongo(product)
     except TimeoutException:
-        print("获取当前页面的商品超时")
+        print("当前页面找不到相应商品")
     except Exception as e:
         traceback.print_exc()
 
