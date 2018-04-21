@@ -27,10 +27,11 @@ class AnalysisFont(object):
 
     def get_num_list(self, woff_file):
         my_font = TTFont(woff_file)
-        my_unicode = my_font.getGlyphOrder()  # 字符编码
+        my_unicode = my_font.getGlyphOrder()  # 字符编码,例：['glyph00000', 'x', 'uniF866', 'uniF8D8', 'uniF353', 'uniE58E', 'uniF668', 'uniF811', 'uniE004', 'uniF664', 'uniF12B', 'uniE060']
+        # my_tb = my_font.keys()  # 表 ['GlyphOrder', 'head', 'hhea', 'maxp', 'OS/2', 'hmtx', 'cmap', 'loca', 'glyf', 'name', 'post', 'GSUB']
 
         for i in range(1, 12):  # self.my_unicode 第0个是空（glyph00000），所以从1开始，共11个，0-9和.
-            my_glyph = my_font['glyf'][my_unicode[i]]
+            my_glyph = my_font['glyf'][my_unicode[i]]  # glyf表数据
             for j in range(11):  # 基础字库已经过滤第0个是空（glyph00000）的情况，所以从0开始
                 base_glyph = self.base_font['glyf'][self.base_unicode[j]]
                 if my_glyph == base_glyph:  # 对比字形数据，得到数字值
