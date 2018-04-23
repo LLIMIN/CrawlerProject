@@ -38,7 +38,7 @@ def parse_one_page():
     # for item in data:
     #     yield dict(zip(item_list, item))
 
-    items = {}
+    items = dict()
     items["ranking"] = selector.xpath(r'//*[@id="app"]/div/div/div/dl/dd/i/text()')
     items["name"] = selector.xpath(r'//*[@id="app"]/div/div/div/dl/dd/div/div/div[1]/p[1]/a/text()')
     items["images"] = selector.xpath(r'//*[@id="app"]/div/div/div/dl/dd/a/img[2]/@data-src')
