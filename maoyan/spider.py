@@ -45,7 +45,7 @@ def parse_one_page():
 
 
 def save_to_file(content):
-    import json
+    import simplejson as json
     with open("data.txt", "a", encoding="utf-8") as fd:
         fd.write(json.dumps(content, ensure_ascii=False) + "\n")
 
